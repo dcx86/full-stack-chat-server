@@ -7,11 +7,8 @@
     "node": "10.16.3"
   },
   "scripts": {
-    "build": "tsc",
-    "watch-ts": "tsc -w",
-    "watch-node": "nodemon dist/index.js",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript, Node\" -c \"yello.bold, cyan.bold\" \"yarn run watch-ts\" \"yarn run watch-node\"",
-    "start": "npm run build && nodemon dist/index.js"
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
+    "prod": "tsc && node ./dist/server.js"
   },
   "repository": {
     "type": "git",
