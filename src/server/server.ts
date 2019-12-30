@@ -2,8 +2,8 @@ import * as express from 'express'
 import * as socketIO from 'socket.io'
 import { createServer, Server } from 'http'
 
-import { ChatEvent } from './constants'
-import { setupListener } from './socket/message-service'
+import { ChatEvent } from '../constants'
+import { setupListener } from '../socket/message-service'
 
 export class ChatServer {
   public static readonly PORT: number = 8080
@@ -14,7 +14,7 @@ export class ChatServer {
 
   constructor() {
     this._app = express()
-    this.port = process.env.PORT || ChatServer.PORT
+    this.port = process.env.SERVER_PORT || ChatServer.PORT
     this.server = createServer(this._app)
     this.initSocket()
     this.listen()
@@ -28,7 +28,7 @@ export class ChatServer {
     this.server.listen(this.port, () => {
       console.log('Running server on port %s.', this.port)
     })
-    this.io.on(ChatEvent.CONNECT, (socket: socketIO.Socket) => {
+    this.io.on(ChatEvent.CONNECT, (socket: any) => {
       console.log('Connected client on port %s', this.port)
 
       setupListener(socket, this.io)
