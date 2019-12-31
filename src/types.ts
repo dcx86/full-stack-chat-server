@@ -1,4 +1,4 @@
 export interface ChatMessage {
-  author: string
+  username: string
   message: string
 }
