@@ -37,6 +37,16 @@ export class ChatServer {
         console.log('Client diconnected')
       })
     })
+
+    const startGracefulShutdown = () => {
+      console.log('Starting shutdown of express...')
+      this.server.close(function() {
+        console.log('Express shut down')
+      })
+    }
+
+    process.on('SIGTERM', startGracefulShutdown)
+    process.on('SIGINT', startGracefulShutdown)
   }
 
   get app(): express.Application {
