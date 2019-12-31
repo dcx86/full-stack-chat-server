@@ -16,7 +16,7 @@ export function setupListener(socket: Socket, io: Server) {
 }
 
 function joinChat(socket: Socket, io: Server, nickname: string, callback: (error: string) => void) {
-  const { error, user } = addUser({ id: socket.id, username: nickname })
+  const { error, user } = addUser({ id: socket.id, username: nickname.toString() })
 
   if (error) return callback(error)
 
@@ -32,7 +32,7 @@ function joinChat(socket: Socket, io: Server, nickname: string, callback: (error
 function leaveChat(socket: Socket, io: Server, m: string) {
   const user = removeUser(socket.id)
   if (user) {
-    io.emit('message', generateMessage({ username: 'Bot', message: m }))
+    io.emit('message', generateMessage({ username: 'Bot', message: m.toString() }))
   }
   socket.disconnect(true)
 }
