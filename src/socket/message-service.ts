@@ -2,10 +2,8 @@ import { Server, Socket } from 'socket.io'
 
 import { ChatEvent } from '../constants'
 import { ChatMessage } from '../types'
-import { addUser, getActiveUsers, removeUser } from '../utils/users'
+import { addUser, removeUser } from '../utils/users'
 import { generateMessage } from '../utils/messages'
-
-const room = 'MAIN_CHAT_ROOM'
 
 export function setupListener(socket: Socket, io: Server) {
   socket.on(ChatEvent.JOIN, (nickname: string, callback: (error: string) => void) =>
@@ -20,17 +18,10 @@ function joinChat(socket: Socket, io: Server, nickname: string, callback: (error
 
   if (error) return callback(error)
 
-  socket.join(room)
-
-  socket.emit('message', generateMessage({ username: 'Bot', message: 'Welcome!' }))
-  socket.broadcast
-    .to(room)
-    .emit(
-      'message',
-      generateMessage({ username: 'Bot', message: `${user.username} has join the chat!` })
-    )
-
-  io.to(room).emit('roomData', { room, users: getActiveUsers() })
+  io.emit(
+    'message',
+    generateMessage({ username: 'Bot', message: `${user.username} has join the chat!` })
+  )
 
   callback('')
 }
@@ -38,7 +29,7 @@ function joinChat(socket: Socket, io: Server, nickname: string, callback: (error
 function leaveChat(socket: Socket, io: Server) {
   const user = removeUser(socket.id)
   if (user) {
-    io.to(room).emit(
+    io.emit(
       'message',
       generateMessage({ username: 'Bot', message: `${user.username} has left the chat!` })
     )
