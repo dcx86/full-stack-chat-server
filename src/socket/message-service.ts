@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 
 import { ChatEvent } from '../constants'
 import { ChatMessage } from '../types'
-import { addUser, getUser, getActiveUsers } from '../utils/users'
+import { addUser, getActiveUsers, removeUser } from '../utils/users'
 import { generateMessage } from '../utils/messages'
 
 const room = 'MAIN_CHAT_ROOM'
@@ -12,6 +12,7 @@ export function setupListener(socket: Socket, io: Server) {
     joinChat(socket, io, nickname, callback)
   )
   socket.on(ChatEvent.MESSAGE, (message: ChatMessage) => sendMessage(socket, io, message))
+  socket.on(ChatEvent.DISCONNECT, () => leaveChat(socket, io))
 }
 
 function joinChat(socket: Socket, io: Server, nickname: string, callback: (error: string) => void) {
@@ -34,7 +35,16 @@ function joinChat(socket: Socket, io: Server, nickname: string, callback: (error
   callback('')
 }
 
+function leaveChat(socket: Socket, io: Server) {
+  const user = removeUser(socket.id)
+  if (user) {
+    io.to(room).emit(
+      'message',
+      generateMessage({ username: 'Bot', message: `${user.username} has left the chat!` })
+    )
+  }
+}
+
 function sendMessage(socket: Socket, io: Server, message: ChatMessage) {
-  const user = getUser(socket.id)
   io.emit('message', generateMessage(message))
 }
