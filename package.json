@@ -1,0 +1,33 @@
+{
+  "name": "full-stack-chat-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "engines": {
+    "node": "10.16.3"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
+    "prod": "tsc && node ./dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dcx86/full-stack-chat-server.git"
+  },
+  "keywords": [],
+  "author": "dcx86",
+  "license": "ISC",
+  "homepage": "https://github.com/dcx86/full-stack-chat-server#readme",
+  "dependencies": {
+    "concurrently": "^5.0.2",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/socket.io": "^2.1.4",
+    "tslint": "^5.20.1"
+  }
+}
