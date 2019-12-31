@@ -1,11 +1,12 @@
 type User = {
   id: string
   username: string
+  timerId?: any
 }
 
 const users: User[] = []
 
-export const addUser = ({ id, username }: User) => {
+export const addUser = ({ id, username, timerId }: User) => {
   username = username.trim().toLowerCase()
 
   if (!username) return { error: 'A username is required!' }
@@ -16,7 +17,7 @@ export const addUser = ({ id, username }: User) => {
 
   if (existingUser) return { error: 'Username is in use!' }
 
-  const user = { id, username }
+  const user = { id, username, timerId }
   users.push(user)
 
   return { user }
@@ -34,4 +35,15 @@ export const getUser = (id: string) => {
 
 export const getActiveUsers = () => {
   return users
+}
+
+export const setUserTimerId = (userId: string, timerId: any) => {
+  const user = { ...getUser(userId), timerId }
+  removeUser(userId)
+  addUser(user)
+}
+
+export const getUserTimerId = (userId: string) => {
+  const user = getUser(userId)
+  return user.timerId
 }
