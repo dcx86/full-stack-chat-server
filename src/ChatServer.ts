@@ -33,7 +33,7 @@ export class ChatServer {
 
       setupListener(socket, this.io)
 
-      socket.on(ChatEvent.DISCONNECT, () => {
+      socket.on(ChatEvent.LEAVECHAT, () => {
         console.log('Client diconnected')
       })
     })
