@@ -13,6 +13,7 @@ export function setupListener(socket: Socket, io: Server) {
   )
   socket.on(ChatEvent.MESSAGE, (message: ChatMessage) => sendMessage(socket, io, message))
   socket.on(ChatEvent.LEAVECHAT, (m: string) => leaveChat(socket, io, m))
+  socket.on(ChatEvent.DISCONNECT, () => disconnect(socket, io))
 }
 
 function joinChat(socket: Socket, io: Server, nickname: string, callback: (error: string) => void) {
@@ -30,10 +31,18 @@ function joinChat(socket: Socket, io: Server, nickname: string, callback: (error
 }
 
 function leaveChat(socket: Socket, io: Server, m: string) {
-  const user = removeUser(socket.id)
+  const user = getUser(socket.id)
   if (user) {
     io.emit('message', generateMessage({ username: 'Bot', message: m.toString() }))
   }
+  socket.disconnect(true)
+}
+
+function disconnect(socket: Socket, io: Server) {
+  const user = getUser(socket.id)
+  const message = `${user.username} has lost connection!`
+  leaveChat(socket, io, message)
+  removeUser(socket.id)
   socket.disconnect(true)
 }
 
