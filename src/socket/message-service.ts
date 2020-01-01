@@ -5,7 +5,7 @@ import { ChatMessage } from '../types'
 import { addUser, removeUser, setUserTimerId, getUserTimerId, getUser } from '../utils/users'
 import { generateMessage } from '../utils/messages'
 
-const maximumInactiveTime = 10 * 60 * 1000
+const maximumInactiveTime = 60 * 1000
 
 export function setupListener(socket: Socket, io: Server) {
   socket.on(ChatEvent.JOIN, (nickname: string, callback: (error: string) => void) =>
